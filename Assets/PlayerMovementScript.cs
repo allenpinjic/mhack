@@ -12,6 +12,8 @@ public class PlayerMovementScript : MonoBehaviour
 
     private SpriteRenderer player;
 
+    public LayerMask currentWall;
+
     private void Update()
     {
         if (!isMoving)
@@ -20,40 +22,6 @@ public class PlayerMovementScript : MonoBehaviour
             input.y = Input.GetAxisRaw("Vertical");
 
 
-            /*
-            if (input.x > 0)
-            {
-                //input.y = 0;
-                //transform.rotation = Quaternion.Euler(Vector3.forward * 180);
-                player.flipX = true;
-                
-            }
-            if ( input.x < 0)
-            {
-                // input.y = 0;
-                //transform.rotation = Quaternion.Euler(Vector3.forward * -180);
-                player.flipX = false;
-            }
-
-     
-            if (input.y > 0)
-            {
-                //input.y = 0;
-                transform.rotation = Quaternion.Euler(Vector3.forward * 180);
-
-            }
-            if (input.y < 0)
-            {
-                // input.y = 0;
-                transform.rotation = Quaternion.Euler(Vector3.forward * 0);
-            }
-
-            /*
-            if (input.y != 0)
-            {
-                input.x = 0;
-            }
-            */
 
             if (input != Vector2.zero)
             {
@@ -62,9 +30,26 @@ public class PlayerMovementScript : MonoBehaviour
                 targetPos.x += input.x;
                 targetPos.y += input.y;
 
-                StartCoroutine(Move(targetPos));
+                // If we can walk towards this space (aka no unauthorized space)
+                // then move
+                if (isWalk(targetPos) == true) {
+                    StartCoroutine(Move(targetPos));
+                }
             }
 
+        }
+    }
+
+    private bool isWalk(Vector3 targetPos)
+    {
+        // If we are overlapping a solid object's layer, then we cannot walk there
+        if(Physics2D.OverlapCircle(targetPos, 0.2f, currentWall) != null)
+        {
+            return false;
+        }
+        else
+        {
+            return true;
         }
     }
 
