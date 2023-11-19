@@ -73,7 +73,7 @@ public class PlayerMovementScript : MonoBehaviour
         isMoving = true;
         while ((targetPos - transform.position).sqrMagnitude > Mathf.Epsilon)
         {
-            transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, targetPos, moveSpeed * Time.deltaTime * 4);
             yield return null;
         }
         transform.position = targetPos;
